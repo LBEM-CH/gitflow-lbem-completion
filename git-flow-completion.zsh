@@ -1,5 +1,11 @@
 #!zsh
 #
+# git-flow-completion for zsh
+# ===========================
+#
+# Zsh completion support for [git-flow (LBEM Edition)](https://github.com/LBEM-CH/gitflow-lbem)
+# Based on git-flow-completion for CJS/AVH Edition.
+#
 # Installation
 # ------------
 #
@@ -46,6 +52,8 @@ _git-flow ()
                 'delete:Delete the branch you are currently on.'
                 'publish:Publish the branch you are currently on.'
                 'rebase:Rebase the branch you are currently on.'
+                'sync:Sync the branch you are currently on.'
+                'propose:Propose the branch as a PR.'
             )
             _describe -t commands 'git flow' subcommands
         ;;
@@ -256,6 +264,8 @@ __git-flow-feature ()
                 'checkout:Checkout local feature branch.'
                 'pull:Pull changes from remote.'
                 'rename:Rename a feature branch.'
+                'sync:Sync feature branch with base branch.'
+                'propose:Create PR for feature branch.'
             )
             _describe -t commands 'git flow feature' subcommands
             _arguments \
@@ -318,6 +328,16 @@ __git-flow-feature ()
                         ':branch:__git_branch_names'
                 ;;
 
+                (sync)
+                    _arguments \
+                        ':feature:__git_flow_feature_list'
+                ;;
+
+                (propose)
+                    _arguments \
+                        ':feature:__git_flow_feature_list'
+                ;;
+
                 *)
                     _arguments \
                         -v'[Verbose (more) output]'
@@ -352,6 +372,8 @@ __git-flow-bugfix ()
                 'checkout:Checkout local bugfix branch.'
                 'pull:Pull changes from remote.'
                 'rename:Rename a bugfix branch.'
+                'sync:Sync bugfix branch with base branch.'
+                'propose:Create PR for bugfix branch.'
             )
             _describe -t commands 'git flow bugfix' subcommands
             _arguments \
@@ -414,6 +436,16 @@ __git-flow-bugfix ()
                         ':branch:__git_branch_names'
                 ;;
 
+                (sync)
+                    _arguments \
+                        ':bugfix:__git_flow_bugfix_list'
+                ;;
+
+                (propose)
+                    _arguments \
+                        ':bugfix:__git_flow_bugfix_list'
+                ;;
+
                 *)
                     _arguments \
                         -v'[Verbose (more) output]'
@@ -439,6 +471,8 @@ __git-flow-config ()
             subcommands=(
                 'list:List the configuration. (Alias to `git flow config`)'
                 'set:Set the configuration option'
+                'base:Set the base branch for a branch'
+                'export:Export the configuration to a .gitflow file'
             )
             _describe -t commands 'git flow config' subcommands
         ;;
@@ -452,7 +486,15 @@ __git-flow-config ()
                         --global'[Use global config file]'\
                         --system'[Use system config file]'\
                         --file'[Use given config file]'\
-                        ':option:(master develop feature hotfix release support versiontagprefix)'
+                        ':option:(master develop feature hotfix bugfix release support versiontagprefix)'
+                ;;
+
+                (export)
+                    _arguments \
+                        --local'[Use repository config file]' \
+                        --global'[Use global config file]'\
+                        --system'[Use system config file]'\
+                        --file'[Use given config file]'
                 ;;
 
                 *)
