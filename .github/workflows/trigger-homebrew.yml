@@ -1,8 +1,9 @@
 name: Trigger Homebrew Update
 
 on:
-  release:
-    types: [published]
+  push:
+    tags:
+      - 'v*'
 
 jobs:
   trigger-homebrew:
@@ -11,7 +12,7 @@ jobs:
       - name: Get latest main repo version
         id: main_version
         run: |
-          MAIN_VERSION=$(curl -s https://api.github.com/repos/LBEM-CH/gitflow-lbem/releases/latest | jq -r .tag_name)
+          MAIN_VERSION=$(curl -s https://api.github.com/repos/LBEM-CH/gitflow-lbem/tags | jq -r '.[0].name')
           echo "version=${MAIN_VERSION}" >> $GITHUB_OUTPUT
           echo "Latest main version: ${MAIN_VERSION}"
 
@@ -21,4 +22,4 @@ jobs:
           token: ${{ secrets.HOMEBREW_DISPATCH_TOKEN }}
           repository: LBEM-CH/homebrew-gitflow-lbem
           event-type: completion-release
-          client-payload: '{"version": "${{ steps.main_version.outputs.version }}", "completion_version": "${{ github.event.release.tag_name }}"}'
+          client-payload: '{"version": "${{ steps.main_version.outputs.version }}", "completion_version": "${{ github.ref_name }}"}'
