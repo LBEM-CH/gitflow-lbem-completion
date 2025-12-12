@@ -3,13 +3,15 @@
 # git-flow-completion
 # ===================
 #
-# Bash completion support for [git-flow (AVH Edition)](http://github.com/petervanderdoes/gitflow)
+# Bash completion support for [git-flow (LBEM Edition)](https://github.com/LBEM-CH/gitflow-lbem)
+# Based on git-flow-completion for CJS/AVH Edition.
 #
 # The contained completion routines provide support for completing:
 #
 #  * git-flow init and version
 #  * feature, bugfix, hotfix and release branches
 #  * remote feature, bugfix, hotfix and release branch names
+#  * sync and propose commands (LBEM Edition)
 #
 #
 # Installation
@@ -55,7 +57,7 @@ __git_flow_config_file_options="
 
 _git_flow ()
 {
-    local subcommands="init feature bugfix release hotfix support help version config finish delete publish rebase"
+    local subcommands="init feature bugfix release hotfix support help version config finish delete publish rebase sync propose"
     local subcommand="$(__git_find_on_cmdline "$subcommands")"
     if [ -z "$subcommand" ]; then
         __gitcomp "$subcommands"
@@ -119,7 +121,7 @@ __git_flow_init ()
 
 __git_flow_feature ()
 {
-    local subcommands="list start finish publish track diff rebase checkout pull help delete rename"
+    local subcommands="list start finish publish track diff rebase checkout pull help delete rename sync propose"
     local subcommand="$(__git_find_on_cmdline "$subcommands")"
 
     if [ -z "$subcommand" ]; then
@@ -192,6 +194,14 @@ __git_flow_feature ()
         ;;
     track)
         __gitcomp_nl "$(__git_flow_list_branches 'feature')"
+        return
+        ;;
+    sync)
+        __gitcomp_nl "$(__git_flow_list_local_branches 'feature')"
+        return
+        ;;
+    propose)
+        __gitcomp_nl "$(__git_flow_list_local_branches 'feature')"
         return
         ;;
     *)
@@ -202,7 +212,7 @@ __git_flow_feature ()
 
 __git_flow_bugfix ()
 {
-    local subcommands="list start finish publish track diff rebase checkout pull help delete rename"
+    local subcommands="list start finish publish track diff rebase checkout pull help delete rename sync propose"
     local subcommand="$(__git_find_on_cmdline "$subcommands")"
 
     if [ -z "$subcommand" ]; then
@@ -275,6 +285,14 @@ __git_flow_bugfix ()
         ;;
     track)
         __gitcomp_nl "$(__git_flow_list_branches 'bugfix')"
+        return
+        ;;
+    sync)
+        __gitcomp_nl "$(__git_flow_list_local_branches 'bugfix')"
+        return
+        ;;
+    propose)
+        __gitcomp_nl "$(__git_flow_list_local_branches 'bugfix')"
         return
         ;;
     *)
@@ -498,7 +516,7 @@ __git_flow_support ()
 
 __git_flow_config ()
 {
-    local subcommands="list set base"
+    local subcommands="list set base export"
     local subcommand="$(__git_find_on_cmdline "$subcommands")"
     if [ -z "$subcommand" ]; then
         __gitcomp "$subcommands"
@@ -519,6 +537,7 @@ __git_flow_config ()
             master develop
             feature bugfix hotfix release support
             versiontagprefix
+            finishmode syncstrategy proposeopen
             "
         return
         ;;
