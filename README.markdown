@@ -1,26 +1,37 @@
 # git-flow-completion
 
 
-Bash, Zsh and fish completion support for [git-flow (AVH Edition)](http://github.com/petervanderdoes/gitflow).
+Bash, Zsh and fish completion support for [git-flow (LBEM Edition)](http://github.com/LBEM-CH/gitflow-lbem).
 
 The contained completion routines provide support for completing:
 
  * git-flow init and version
- * feature, hotfix and release branches
- * remote feature, hotfix and release branch names
+ * feature, bugfix, hotfix and release branches
+ * remote feature, bugfix, hotfix and release branch names
+ * LBEM Edition commands: sync, propose, config export
+
+## About LBEM Edition
+
+This is the [LBEM Edition](https://github.com/LBEM-CH/gitflow-lbem) of git-flow, a fork of the CJS/AVH Edition with additional features:
+
+ * `sync` - Sync feature/bugfix branches with their base branch
+ * `propose` - Create pull/merge requests for feature/bugfix branches
+ * `config export` - Export configuration to a `.gitflow` file
+ * `.gitflow` file support - Shareable gitflow configuration
 
 ## Changelog
 
-#### Current develop
-  * Update bash completion script.  
-    We added completion of flags and (sub)commands.
-    
+#### LBEM Edition
+  * Added completion for sync and propose subcommands
+  * Added completion for config export subcommand
+  * Added bugfix branch completions for fish shell
+
 ## Installation for Bash
 
 
 To achieve git-flow completion nirvana:
 
- 0. [Install git-completion](http://github.com/petervanderdoes/git-flow-completion/wiki/Install-Bash-git-completion).
+ 0. [Install git-completion](http://github.com/LBEM-CH/gitflow-lbem-completion/wiki/Install-Bash-git-completion).
 
  1. Install `git-flow-completion.bash`. Either:
 
@@ -76,7 +87,8 @@ To achieve git-flow completion nirvana:
 ## The Fine Print
 
 Author:
-Copyright 2012-2013 Peter van der Does.
+Copyright 2012-2023 Peter van der Does.
+Copyright 2025 Konstantin Weindel.
 
 Original Author:
 Copyright (c) 2011 [Justin Hileman](http://justinhileman.com)

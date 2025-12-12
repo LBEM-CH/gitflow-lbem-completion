@@ -3,13 +3,13 @@
 # git-flow-completion
 # ===================
 #
-# Fish completion support for [git-flow (AVH Edition)](http://github.com/petervanderdoes/gitflow)
+# Fish completion support for [git-flow (LBEM Edition)](http://github.com/LBEM-CH/gitflow-lbem)
 #
 # The contained completion routines provide support for completing:
 #
 #  * git-flow init and version
-#  * feature, hotfix and release branches
-#  * remote feature, hotfix and release branch names
+#  * feature, bugfix, hotfix and release branches
+#  * remote feature, bugfix, hotfix and release branch names
 #
 #
 # Installation
@@ -23,7 +23,8 @@
 # The Fine Print
 # --------------
 # Author:
-# Copyright 2012 Peter van der Does.
+# Copyright 2012-2023 Peter van der Does.
+# Copyright 2025 Konstantin Weindel (LBEM).
 #
 # Original Author:
 # Copyright (c) 2012 [Justin Hileman](http://justinhileman.com)
@@ -143,6 +144,14 @@ complete -f -c git -n '__fish_git_flow_using_command feature checkout' -a '(__fi
 complete -f -c git -n '__fish_git_flow_using_command feature' -a pull     -d 'Pull changes from remote'
 complete -f -c git -n '__fish_git_flow_using_command feature pull' -a '(__fish_git_remotes)' -d 'Remote'
 
+complete -f -c git -n '__fish_git_flow_using_command feature' -a sync     -d 'Sync feature branch with base branch'
+complete -f -c git -n '__fish_git_flow_using_command feature sync' -l push -d 'Push after syncing'
+complete -f -c git -n '__fish_git_flow_using_command feature sync' -l nopush -d 'Do not push after syncing'
+complete -f -c git -n '__fish_git_flow_using_command feature sync' -a '(__fish_git_flow_branches feature)' -d 'Feature branch'
+
+complete -f -c git -n '__fish_git_flow_using_command feature' -a propose  -d 'Create pull request for feature branch'
+complete -f -c git -n '__fish_git_flow_using_command feature propose' -a '(__fish_git_flow_branches feature)' -d 'Feature branch'
+
 
 
 ## git-flow release
@@ -192,10 +201,58 @@ complete -f -c git -n '__fish_git_flow_using_command hotfix finish' -s m -d 'Use
 complete -f -c git -n '__fish_git_flow_using_command hotfix finish' -s p -d 'Push to $ORIGIN after performing finish'
 complete -f -c git -n '__fish_git_flow_using_command hotfix finish' -a '(__fish_git_flow_branches hotfix)' -d 'Hotfix branch'
 
-complete -f -c git -n '__fish_git_flow_using_command hotfix' -a delete   -d 'Delete a feature branch'
+complete -f -c git -n '__fish_git_flow_using_command hotfix' -a delete   -d 'Delete a hotfix branch'
 complete -f -c git -n '__fish_git_flow_using_command hotfix delete' -s f -d 'Force deletion'
 complete -f -c git -n '__fish_git_flow_using_command hotfix delete' -s r -d 'Delete remote branch'
 complete -f -c git -n '__fish_git_flow_using_command hotfix delete' -a '(__fish_git_flow_branches hotfix)' -d 'Hotfix branch'
+
+complete -f -c git -n '__fish_git_flow_using_command hotfix' -a publish  -d 'Publish a hotfix branch to remote'
+complete -f -c git -n '__fish_git_flow_using_command hotfix publish' -a '(__fish_git_flow_unpublished_branches hotfix)' -d 'Hotfix branch'
+
+
+## git-flow bugfix
+
+complete -f -c git -n '__fish_git_flow_using_command' -a bugfix      -d 'Manage bugfix branches'
+complete -f -c git -n '__fish_git_flow_using_command bugfix' -a list -d 'List bugfix branches'
+complete -f -c git -n '__fish_git_flow_using_command bugfix' -s v    -d 'Verbose output'
+
+complete -f -c git -n '__fish_git_flow_using_command bugfix' -a start    -d 'Start a new bugfix branch'
+complete -f -c git -n '__fish_git_flow_using_command bugfix start' -s F  -d 'Fetch from origin first'
+
+complete -f -c git -n '__fish_git_flow_using_command bugfix' -a finish   -d 'Finish a bugfix branch'
+complete -f -c git -n '__fish_git_flow_using_command bugfix finish' -s F -d 'Fetch from origin first'
+complete -f -c git -n '__fish_git_flow_using_command bugfix finish' -s r -d 'Rebase instead of merging'
+complete -f -c git -n '__fish_git_flow_using_command bugfix finish' -a '(__fish_git_flow_branches bugfix)' -d 'Bugfix branch'
+
+complete -f -c git -n '__fish_git_flow_using_command bugfix' -a delete   -d 'Delete a bugfix branch'
+complete -f -c git -n '__fish_git_flow_using_command bugfix delete' -s f -d 'Force deletion'
+complete -f -c git -n '__fish_git_flow_using_command bugfix delete' -s r -d 'Delete remote branch'
+complete -f -c git -n '__fish_git_flow_using_command bugfix delete' -a '(__fish_git_flow_branches bugfix)' -d 'Bugfix branch'
+
+complete -f -c git -n '__fish_git_flow_using_command bugfix' -a publish  -d 'Publish a bugfix branch to remote'
+complete -f -c git -n '__fish_git_flow_using_command bugfix publish' -a '(__fish_git_flow_unpublished_branches bugfix)' -d 'Bugfix branch'
+
+complete -f -c git -n '__fish_git_flow_using_command bugfix' -a track    -d 'Checkout remote bugfix branch'
+complete -f -c git -n '__fish_git_flow_using_command bugfix track' -a '(__fish_git_flow_untracked_branches bugfix)' -d 'Bugfix branch'
+
+complete -f -c git -n '__fish_git_flow_using_command bugfix' -a diff     -d 'Show all changes'
+
+complete -f -c git -n '__fish_git_flow_using_command bugfix' -a rebase   -d 'Rebase against integration branch'
+complete -f -c git -n '__fish_git_flow_using_command bugfix rebase' -s i -d 'Do an interactive rebase'
+
+complete -f -c git -n '__fish_git_flow_using_command bugfix' -a checkout -d 'Checkout local bugfix branch'
+complete -f -c git -n '__fish_git_flow_using_command bugfix checkout' -a '(__fish_git_flow_branches bugfix)' -d 'Bugfix branch'
+
+complete -f -c git -n '__fish_git_flow_using_command bugfix' -a pull     -d 'Pull changes from remote'
+complete -f -c git -n '__fish_git_flow_using_command bugfix pull' -a '(__fish_git_remotes)' -d 'Remote'
+
+complete -f -c git -n '__fish_git_flow_using_command bugfix' -a sync     -d 'Sync bugfix branch with base branch'
+complete -f -c git -n '__fish_git_flow_using_command bugfix sync' -l push -d 'Push after syncing'
+complete -f -c git -n '__fish_git_flow_using_command bugfix sync' -l nopush -d 'Do not push after syncing'
+complete -f -c git -n '__fish_git_flow_using_command bugfix sync' -a '(__fish_git_flow_branches bugfix)' -d 'Bugfix branch'
+
+complete -f -c git -n '__fish_git_flow_using_command bugfix' -a propose  -d 'Create pull request for bugfix branch'
+complete -f -c git -n '__fish_git_flow_using_command bugfix propose' -a '(__fish_git_flow_branches bugfix)' -d 'Bugfix branch'
 
 
 ## git-flow support
@@ -217,7 +274,15 @@ complete -f -c git -n '__fish_git_flow_using_command config list' -l system  -d 
 complete -f -c git -n '__fish_git_flow_using_command config list' -l file  -d 'Use given config file'
 
 complete -f -c git -n '__fish_git_flow_using_command config' -a set -d 'Set configuration option'
-complete -f -c git -n '__fish_git_flow_using_command config start' -l local  -d 'Use repository config file'
-complete -f -c git -n '__fish_git_flow_using_command config start' -l global  -d 'Use global config file'
-complete -f -c git -n '__fish_git_flow_using_command config start' -l system  -d 'Use system config file'
-complete -f -c git -n '__fish_git_flow_using_command config start' -l file  -d 'Use given config file'
+complete -f -c git -n '__fish_git_flow_using_command config set' -l local  -d 'Use repository config file'
+complete -f -c git -n '__fish_git_flow_using_command config set' -l global  -d 'Use global config file'
+complete -f -c git -n '__fish_git_flow_using_command config set' -l system  -d 'Use system config file'
+complete -f -c git -n '__fish_git_flow_using_command config set' -l file  -d 'Use given config file'
+
+complete -f -c git -n '__fish_git_flow_using_command config' -a base -d 'Set base branch for a branch'
+
+complete -f -c git -n '__fish_git_flow_using_command config' -a export -d 'Export configuration to .gitflow file'
+complete -f -c git -n '__fish_git_flow_using_command config export' -l local  -d 'Use repository config file'
+complete -f -c git -n '__fish_git_flow_using_command config export' -l global  -d 'Use global config file'
+complete -f -c git -n '__fish_git_flow_using_command config export' -l system  -d 'Use system config file'
+complete -f -c git -n '__fish_git_flow_using_command config export' -l file  -d 'Use given config file'
